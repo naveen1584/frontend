@@ -1,41 +1,41 @@
 <template>
-  <div v-if="currentTutorial" class="edit-form">
+  <div v-if="currentTutorial" >
     <h4>Tutorial</h4>
     <form>
-      <div class="form-group">
+      <div >
         <label for="title">Title</label>
-        <input type="text" class="form-control" id="title"
+        <input type="text"  id="title"
           v-model="currentTutorial.title"
         />
       </div>
-      <div class="form-group">
+      <div >
         <label for="description">Description</label>
-        <input type="text" class="form-control" id="description"
+        <input type="text" id="description"
           v-model="currentTutorial.description"
         />
       </div>
-      <div class="form-group">
+      <div >
         <label><strong>Status:</strong></label>
         {{ currentTutorial.published ? "Published" : "Pending" }}
       </div>
     </form>
-    <button class="badge badge-primary mr-2"
+    <button 
       v-if="currentTutorial.published"
       @click="updatePublished(false)"
     >
       UnPublish
     </button>
-    <button v-else class="badge badge-primary mr-2"
+    <button v-else 
       @click="updatePublished(true)"
     >
       Publish
     </button>
-    <button class="badge badge-danger mr-2"
+    <button 
       @click="deleteTutorial"
     >
       Delete
     </button>
-    <button type="submit" class="badge badge-success"
+    <button type="submit" 
       @click="updateTutorial"
     >
       Update

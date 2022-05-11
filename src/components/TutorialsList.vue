@@ -1,11 +1,11 @@
 <template>
-  <div class="list row">
-    <div class="col-md-8">
-      <div class="input-group mb-3">
-        <input type="text" class="form-control" placeholder="Search by title"
+  <div >
+    <div >
+      <div >
+        <input type="text" placeholder="Search by title"
           v-model="title"/>
-        <div class="input-group-append">
-          <button class="btn btn-outline-secondary" type="button"
+        <div >
+          <button type="button"
             @click="searchTitle"
           >
             Search
@@ -13,11 +13,11 @@
         </div>
       </div>
     </div>
-    <div class="col-md-6">
+    <div >
       <h4>Tutorials List</h4>
-      <ul class="list-group">
-        <li class="list-group-item"
-          :class="{ active: index == currentIndex }"
+      <ul >
+        <li 
+          
           v-for="(tutorial, index) in tutorials"
           :key="index"
           @click="setActiveTutorial(tutorial, index)"
@@ -25,11 +25,11 @@
           {{ tutorial.title }}
         </li>
       </ul>
-      <button class="m-3 btn btn-sm btn-danger" @click="removeAllTutorials">
+      <button  @click="removeAllTutorials">
         Remove All
       </button>
     </div>
-    <div class="col-md-6">
+    <div >
       <div v-if="currentTutorial">
         <h4>Tutorial</h4>
         <div>
@@ -41,7 +41,7 @@
         <div>
           <label><strong>Status:</strong></label> {{ currentTutorial.published ? "Published" : "Pending" }}
         </div>
-        <router-link :to="'/tutorials/' + currentTutorial.id" class="badge badge-warning">Edit</router-link>
+        <router-link :to="'/tutorials/' + currentTutorial.id" >Edit</router-link>
       </div>
       <div v-else>
         <br />
