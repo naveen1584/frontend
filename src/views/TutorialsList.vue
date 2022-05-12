@@ -18,19 +18,23 @@
         </v-col> 
       </v-row>
       <v-row>
-        <v-col  cols="8"
+        <v-col  cols="9"
               sm="2">
             <span class="text-h6">Title</span>
         </v-col>
-        <v-col  cols="8"
+        <v-col  cols="9"
               sm="4">
             <span class="text-h6">Description</span>
         </v-col>
-        <v-col  cols="8"
+        <v-col  cols="9"
               sm="1">
             <span class="text-h6">Edit</span>
         </v-col>
-        <v-col  cols="8"
+        <v-col  cols="9"
+              sm="1">
+            <span class="text-h6">View</span>
+        </v-col>
+        <v-col  cols="9"
               sm="1">
             <span class="text-h6">Delete</span>
         </v-col>
@@ -39,8 +43,9 @@
         v-for="tutorial in tutorials"
         :key="tutorial.id"
         :tutorial="tutorial"
-        @deleteItem="goDelete(tutorial)"
-        @updateItem="goEdit(tutorial)"
+        @deleteTutorial="goDelete(tutorial)"
+        @updateTutorial="goEdit(tutorial)"
+        @viewTutorial="goView(tutorial)"
     />
  
   <v-btn  @click="removeAllTutorials">
@@ -67,6 +72,9 @@ export default {
   methods: {
     goEdit(tutorial) {
       this.$router.push({ name: 'edit', params: { id: tutorial.id } });
+    },
+    goView(tutorial) {
+      this.$router.push({ name: 'view', params: { id: tutorial.id } });
     },
     goDelete(tutorial) {
       TutorialDataService.delete(tutorial.id)
