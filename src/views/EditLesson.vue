@@ -1,23 +1,21 @@
 <template>
-    <h1>Tutorial Edit</h1>
+    <h1>Edit Lesson</h1>
     <h4>{{ message }}</h4>
+    <h4>Tutorial : {{tutorialId}} Lesson : {{lessonId}}</h4>
+
     <v-form>
        <v-text-field
             label="Title"
-            v-model="tutorial.title"
+            v-model="lesson.title"
         />
         <v-text-field
             label="Description"
-            v-model="tutorial.description"
-        />
-        <v-text-field
-            label="Description"
-            v-model="tutorial.published"
+            v-model="lesson.description"
         />
         <v-row justify="center">
             <v-col col="2"> </v-col>
             <v-col col="2">
-                <v-btn color="success" @click="updateTutorial()"
+                <v-btn color="success" @click="saveLesson()"
                     >Save</v-btn
                 >
             </v-col>
@@ -29,50 +27,49 @@
     </v-form>
 </template>
 <script>
-import TutorialDataService from "../services/TutorialDataService";
+import LessonDataService from "../services/LessonDataService";
 export default {
-  name: "edit-tutorial",
-  props: ['id'],
+  name: "edit-lesson",
+  props: {tutorialId : String,lessonId:String},
   data() {
     return {
-      tutorial: {},
+      lesson: Object,
       message: "Enter data and click save"
     };
   },
   methods: {
-    retrieveTutorial() {
-      TutorialDataService.get(this.id)
+    retrieveLesson() {
+      LessonDataService.getLesson(this.tutorialId,this.lessonId)
         .then(response => {
-          this.tutorial= response.data;
+          this.lesson= response.data;
         })
         .catch(e => {
           this.message = e.response.data.message;
         });
 
     },
-
-    updateTutorial() {
+    saveLesson() {
       var data = {
-        title: this.tutorial.title,
-        description: this.tutorial.description
-
+        title: this.lesson.title,
+        description: this.lesson.description,
+        tutorialId : this.lesson.tutorialId
       };
-      TutorialDataService.update(this.id,data)
+      LessonDataService.updateLesson(this.lesson.tutorialId,this.lesson.id, data)
         .then(response => {
-          this.tutorial.id = response.data.id;
-          console.log("add "+response.data);
-          this.$router.push({ name: 'tutorials' });
+          this.lesson.id = response.data.id;
+        
+         this.$router.push({ name: 'view' , params: { id: this.lesson.tutorialId }} );
         })
         .catch(e => {
           this.message = e.response.data.message;
         });
     },
     cancel(){
-        this.$router.push({ name: 'tutorials' });
+        this.$router.push({ name: 'view' , params: { id: this.lesson.tutorialId }} );
     }
   },
     mounted() {
-    this.retrieveTutorial();
+      this.retrieveLesson();
   }
 }
 
