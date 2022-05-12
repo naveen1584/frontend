@@ -1,54 +1,57 @@
 <template>
-  <div class="list row">
-    <div class="col-md-8">
-      <div class="input-group mb-3">
-        <input type="text" class="form-control" placeholder="Search by title"
-          v-model="title"/>
-        <div class="input-group-append">
-          <button class="btn btn-outline-secondary" type="button"
+
+    <h1>Tutorial List</h1>
+    <h4>{{ message }}</h4>
+  
+      <v-row >
+        <v-col col="2">
+          <v-btn color = "success"
             @click="searchTitle"
           >
             Search
-          </button>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-6">
-      <h4>Tutorials List</h4>
-      <ul class="list-group">
-        <li class="list-group-item"
-          :class="{ active: index == currentIndex }"
-          v-for="(tutorial, index) in tutorials"
+          </v-btn>
+        </v-col>
+        <v-col col="8">
+            <v-text-field 
+              v-model="title"/>
+        </v-col>
+           
+      </v-row>
+    <div>
+    <v-table height="300px">
+    <template v-slot:default>
+      <thead>
+        <tr>
+          <th class="text-left" width="30">
+            Title
+          </th>
+          <th class="text-left">
+            Description
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+        v-for="(tutorial, index) in tutorials"
           :key="index"
-          @click="setActiveTutorial(tutorial, index)"
         >
-          {{ tutorial.title }}
-        </li>
-      </ul>
-      <button class="m-3 btn btn-sm btn-danger" @click="removeAllTutorials">
-        Remove All
-      </button>
-    </div>
-    <div class="col-md-6">
-      <div v-if="currentTutorial">
-        <h4>Tutorial</h4>
-        <div>
-          <label><strong>Title:</strong></label> {{ currentTutorial.title }}
-        </div>
-        <div>
-          <label><strong>Description:</strong></label> {{ currentTutorial.description }}
-        </div>
-        <div>
-          <label><strong>Status:</strong></label> {{ currentTutorial.published ? "Published" : "Pending" }}
-        </div>
-        <router-link :to="'/tutorials/' + currentTutorial.id" class="badge badge-warning">Edit</router-link>
-      </div>
-      <div v-else>
-        <br />
-        <p>Please click on a Tutorial...</p>
-      </div>
-    </div>
+          <td >{{ tutorial.title }}</td>
+          <td>{{ tutorial.description }}</td>
+          <td>
+            
+              <v-btn  size="x-small" icon="mdi-pencil" @click="goEdit(tutorial)"/> 
+          </td>
+          <td>
+              <v-btn  size="x-small" icon="mdi-trash-can"  @click="goDelete(tutorial)"/>
+          </td>
+        </tr>
+      </tbody>
+    </template>
+  </v-table>
   </div>
+  <v-btn  @click="removeAllTutorials">
+    Remove All
+  </v-btn>
 </template>
 <script>
 import TutorialDataService from "../services/TutorialDataService";
@@ -59,10 +62,24 @@ export default {
       tutorials: [],
       currentTutorial: null,
       currentIndex: -1,
-      title: ""
+      title: "",
+      message : "Click on a tutorial to edit"
     };
   },
   methods: {
+    goEdit(tutorial) {
+      this.$router.push({ name: 'edit', params: { id: tutorial.id } });
+    },
+    goDelete(tutorial) {
+      TutorialDataService.delete(tutorial.id)
+        .then(response => {
+          this.tutorials = response.data;
+          this.retrieveTutorials()
+        })
+        .catch(e => {
+          console.log(e);
+        });
+    },
     retrieveTutorials() {
       TutorialDataService.getAll()
         .then(response => {
