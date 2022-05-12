@@ -12,17 +12,13 @@
             <v-spacer></v-spacer>
             <v-toolbar-items>
                 <v-btn 
-                    
-                    text
-                    plain
+                    variant="text"
                     @click="goList"
                     >
                   List
                 </v-btn>
                 <v-btn 
-                    
-                    text
-                    plain
+                    variant="text"
                     @click="goAdd"
                     >
                   Add

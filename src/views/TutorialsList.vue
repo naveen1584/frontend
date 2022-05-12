@@ -4,57 +4,52 @@
     <h4>{{ message }}</h4>
   
       <v-row >
-        <v-col col="2">
+        <v-col  cols="12"
+        sm="2">
           <v-btn color = "success"
             @click="searchTitle"
           >
             Search
           </v-btn>
         </v-col>
-        <v-col col="8">
-            <v-text-field 
+        <v-col col="12" sm="10">
+            <v-text-field density="compact" clearable
               v-model="title"/>
-        </v-col>
-           
+        </v-col> 
       </v-row>
-    <div>
-    <v-table height="300px">
-    <template v-slot:default>
-      <thead>
-        <tr>
-          <th class="text-left" width="30">
-            Title
-          </th>
-          <th class="text-left">
-            Description
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr
-        v-for="(tutorial, index) in tutorials"
-          :key="index"
-        >
-          <td >{{ tutorial.title }}</td>
-          <td>{{ tutorial.description }}</td>
-          <td>
-            
-              <v-btn  size="x-small" icon="mdi-pencil" @click="goEdit(tutorial)"/> 
-          </td>
-          <td>
-              <v-btn  size="x-small" icon="mdi-trash-can"  @click="goDelete(tutorial)"/>
-          </td>
-        </tr>
-      </tbody>
-    </template>
-  </v-table>
-  </div>
+      <v-row>
+        <v-col  cols="8"
+              sm="2">
+            <span class="text-h6">Title</span>
+        </v-col>
+        <v-col  cols="8"
+              sm="4">
+            <span class="text-h6">Description</span>
+        </v-col>
+        <v-col  cols="8"
+              sm="1">
+            <span class="text-h6">Edit</span>
+        </v-col>
+        <v-col  cols="8"
+              sm="1">
+            <span class="text-h6">Delete</span>
+        </v-col>
+      </v-row>
+      <TutorialDisplay
+        v-for="tutorial in tutorials"
+        :key="tutorial.id"
+        :tutorial="tutorial"
+        @deleteItem="goDelete(tutorial)"
+        @updateItem="goEdit(tutorial)"
+    />
+ 
   <v-btn  @click="removeAllTutorials">
     Remove All
   </v-btn>
 </template>
 <script>
 import TutorialDataService from "../services/TutorialDataService";
+import TutorialDisplay from '@/components/TutorialDisplay.vue';
 export default {
   name: "tutorials-list",
   data() {
@@ -63,31 +58,34 @@ export default {
       currentTutorial: null,
       currentIndex: -1,
       title: "",
-      message : "Click on a tutorial to edit"
+      message : "Search, Edit or Delete Tutorials"
     };
   },
+  components: {
+        TutorialDisplay
+    },
   methods: {
     goEdit(tutorial) {
       this.$router.push({ name: 'edit', params: { id: tutorial.id } });
     },
     goDelete(tutorial) {
       TutorialDataService.delete(tutorial.id)
-        .then(response => {
-          this.tutorials = response.data;
+        .then( () => {
+    
           this.retrieveTutorials()
         })
         .catch(e => {
-          console.log(e);
+          this.message = e.response.data.message;
         });
     },
     retrieveTutorials() {
       TutorialDataService.getAll()
         .then(response => {
           this.tutorials = response.data;
-          console.log(response.data);
+          
         })
         .catch(e => {
-          console.log(e);
+          this.message = e.response.data.message;
         });
     },
     refreshList() {
@@ -106,7 +104,7 @@ export default {
           this.refreshList();
         })
         .catch(e => {
-          console.log(e);
+          this.message = e.response.data.message;
         });
     },
     
@@ -115,10 +113,10 @@ export default {
         .then(response => {
           this.tutorials = response.data;
           this.setActiveTutorial(null);
-          console.log(response.data);
+          
         })
         .catch(e => {
-          console.log(e);
+          this.message = e.response.data.message;
         });
     }
   },
@@ -128,9 +126,5 @@ export default {
 };
 </script>
 <style>
-.list {
-  text-align: left;
-  max-width: 750px;
-  margin: auto;
-}
+
 </style>
