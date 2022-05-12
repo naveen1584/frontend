@@ -4,21 +4,24 @@ const routes =  [
     path: "/",
     alias: "/tutorials",
     name: "tutorials",
-    component: () => import("./components/TutorialsList")
+    component: () => import("./views/TutorialsList.vue")
   },
   {
-    path: "/tutorials/:id",
-    name: "tutorial-details",
-    component: () => import("./components/Tutorial")
+    path: "/edit/:id",
+    name: "edit",
+    component: () => import("./views/EditTutorial.vue"),
+    props: true
   },
   {
     path: "/add",
     name: "add",
-    component: () => import("./components/AddTutorial")
+    component: () => import("./views/AddTutorial.vue")
   }
 ];
 const router = createRouter({
-  history: createWebHistory(),
+  base: process.env.NODE_ENV === 'development' ? '/' : '/tutorial-frontend-1/',
+  history: createWebHistory(process.env.BASE_URL),
   routes,
 });
+
 export default router;
