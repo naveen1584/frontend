@@ -1,20 +1,24 @@
 <template>
 <v-row>
-  <v-col  cols="8"
+  <v-col  cols="9"
         sm="2">
       <span >{{ tutorial.title }}</span>
   </v-col>
-  <v-col  cols="8"
+  <v-col  cols="9"
         sm="4">
       <span> {{ tutorial.description }}</span>
   </v-col>
-  <v-col  cols="8"
+  <v-col  cols="9"
         sm="1">
-      <v-btn size="x-small" icon="mdi-pencil" @click="updateItem"/>
+      <v-btn size="x-small" icon="mdi-pencil" @click="updateTutorial"/>
   </v-col>
-  <v-col  cols="8"
+  <v-col  cols="9"
         sm="1">
-      <v-btn size="x-small" icon="mdi-trash-can" @click="deleteItem"/>
+      <v-btn size="x-small" icon="mdi-format-list-bulleted-type" @click="viewTutorial"/>
+  </v-col>
+  <v-col  cols="9"
+        sm="1">
+      <v-btn size="x-small" icon="mdi-trash-can" @click="deleteTutorial"/>
   </v-col>
 </v-row>
 </template>
@@ -31,11 +35,14 @@ export default {
   },
   methods: {
 
-    deleteItem() {
-      this.$emit("deleteItem");
+    deleteTutorial() {
+      this.$emit("deleteTutorial");
     },
-    updateItem() {
-      this.$emit("updateItem");
+    updateTutorial() {
+      this.$emit("updateTutorial");
+    },
+    viewTutorial() {
+      this.$emit("viewTutorial");
     }
   }
 };
